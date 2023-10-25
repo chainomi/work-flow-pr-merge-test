@@ -53,12 +53,18 @@ jobs:
       #     github_token: ${{ secrets.GH_TOKEN }}
       #     branch: post-${{ steps.suffix.outputs.value }}
 
-      - name: create pull request towards the main branch
-        uses: peter-evans/create-pull-request@v3.10.1
-        with:
-          token: ${{ secrets.GH_TOKEN }}
-          commit-message: Auto Pull Request
-          title: New post pr
-          body: Auto-created Pull Request
-          branch: post-${{ steps.suffix.outputs.value }} # The branch where you commit
-          base: main # Don't forget to specify the right base branch here
+        - name: create pull request
+          run: |
+                set -xe
+                echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
+                gh pr create --title "New post" --body "This is a PR to add changes to index.html"
+
+      # - name: create pull request towards the main branch
+      #   uses: peter-evans/create-pull-request@v3.10.1
+      #   with:
+      #     token: ${{ secrets.GH_TOKEN }}
+      #     commit-message: Auto Pull Request
+      #     title: New post pr
+      #     body: Auto-created Pull Request
+      #     branch: post-${{ steps.suffix.outputs.value }} # The branch where you commit
+      #     base: main # Don't forget to specify the right base branch here
