@@ -25,15 +25,15 @@ jobs:
       - name: Example how to use the output
         run: echo "${{ steps.suffix.outputs.value }}"
 
-      # - name: create branch
-      #   run: git checkout -b post-${{ steps.suffix.outputs.value }}
-
       - name: create branch
-        uses: peterjgrainger/action-create-branch@v2.2.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        with:
-          branch: post-${{ steps.suffix.outputs.value }}
+        run: git checkout -b post-${{ steps.suffix.outputs.value }}
+
+      # - name: create branch
+      #   uses: peterjgrainger/action-create-branch@v2.2.0
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      #   with:
+      #     branch: post-${{ steps.suffix.outputs.value }}
 
       - name: run command - echo to file
         run: echo "testing" >> index.html
@@ -41,7 +41,6 @@ jobs:
       - name: commit and push new file
         run: |
           set -xe
-          git checkout post-${{ steps.suffix.outputs.value }}
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
           git add .
