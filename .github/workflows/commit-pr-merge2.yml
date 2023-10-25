@@ -26,12 +26,7 @@ jobs:
         run: echo "${{ steps.suffix.outputs.value }}"
 
       - name: create branch
-        uses: peterjgrainger/action-create-branch@v2.0.1
-        env:
-          token: ${{ secrets.GH_TOKEN }} 
-        with:
-          # The branch to create
-          branch: post-${{ steps.suffix.outputs.value }}
+        run: git checkout -b post-${{ steps.suffix.outputs.value }}
 
       - name: run command - echo to file
         run: echo "testing" >> index.html
