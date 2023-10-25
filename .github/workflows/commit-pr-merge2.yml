@@ -1,0 +1,53 @@
+name: Create Branch and Pull Request
+
+on:
+  # Trigger the workflow on push or manually, adjust as necessary
+  push:
+    branches:
+      - main
+
+
+
+
+jobs:
+  create:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+
+      - name: Generate pull request branch suffix
+        id: suffix
+        run: |
+              suffix=$(date +'%Y%m%d%H%M%S')
+              echo "::set-output name=value::$(echo $suffix)"
+
+      - name: Example how to use the output
+        run: echo "${{ steps.suffix.outputs.value }}"
+
+      - name: create branch
+        uses: peterjgrainger/action-create-branch@v2.0.1
+        with:
+          # The branch to create
+          branch: post-${{ steps.suffix.outputs.value }}
+
+      - name: run command - echo to file
+        run: echo "testing" >> index.html
+
+      - name: commit and push new file
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+          git add .
+          git commit -m "New post"
+          git push -u origin post-${{ steps.suffix.outputs.value }}
+
+      - name: create pull request towards the main branch
+        uses: peter-evans/create-pull-request@v3.10.1
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          commit-message: Auto Pull Request
+          title: New post pr
+          body: Auto-created Pull Request
+          branch: post-${{ steps.suffix.outputs.value }} # The branch where you commit
+          base: main # Don't forget to specify the right base branch here
