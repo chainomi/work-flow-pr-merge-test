@@ -24,9 +24,10 @@ jobs:
     # Step 3: Configure user information
     - name: Configure user info
       run: |
-        gh auth login --with-token ${{ secrets.GH_TOKEN }}
-        git config --global user.email "workflow-bot@example.com"
-        git config --global user.name "Workflow Bot"
+            set -xeuo pipefail
+            gh auth login --with-token ${{ secrets.GH_TOKEN }}
+            git config --global user.email "workflow-bot@example.com"
+            git config --global user.name "Workflow Bot"
 
     # Step 4: Create a new branch
     - name: Create a new branch
