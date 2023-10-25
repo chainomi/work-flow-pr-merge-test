@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  commit changes, make PR and merge PR:
+  commit-changes-create-pr-and-merge-pr:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -19,16 +19,13 @@ jobs:
               suffix=$(date +'%Y%m%d%H%M%S')
               echo "::set-output name=value::$(echo $suffix)"
 
-      - name: Example how to use the output
-        run: echo "${{ steps.suffix.outputs.value }}"
-
-      - name: create branch
+      - name: Create branch
         run: git checkout -b post-${{ steps.suffix.outputs.value }}
 
-      - name: run command - echo to file
+      - name: Run command - echo to file
         run: echo "testing" >> index.html
 
-      - name: commit and push new file
+      - name: Commit and push new file
         run: |
               set -xe
               git config user.name "chainomi"
@@ -37,13 +34,13 @@ jobs:
               git commit -m "New post"
               git push origin post-${{ steps.suffix.outputs.value }}
 
-      - name: create pull request
+      - name: Create pull request
         run: |
               set -xe
               echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
               gh pr create --title "New auto pull request for - branch post-${{ steps.suffix.outputs.value }}" --body "This is a PR to add changes to index.html"
 
-      - name: merge pull request
+      - name: Merge pull request
         run: |
               set -xe
               gh pr merge --auto --delete-branch --squash "post-${{ steps.suffix.outputs.value }}"         
