@@ -17,14 +17,14 @@ jobs:
       with:
         fetch-depth: 0
 
-    # Step 2: Set up the GitHub CLI
-    - name: Set up GitHub CLI
-      # uses: cli/cli@v1
+    # # Step 2: Set up the GitHub CLI
+    # - name: Set up GitHub CLI
+    #   # uses: cli/cli@v1
 
     # Step 3: Configure user information
     - name: Configure user info
       run: |
-        gh auth login --with-token ${{ secrets.GITHUB_TOKEN }}
+        gh auth login --with-token ${{ secrets.GH_TOKEN }}
         git config --global user.email "workflow-bot@example.com"
         git config --global user.name "Workflow Bot"
 
