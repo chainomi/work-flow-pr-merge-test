@@ -32,7 +32,6 @@ jobs:
         run: echo "testing" >> index.html
 
       - name: commit and push new file
-        uses: actions/checkout@v2.3.4
         with:
           token: ${{ secrets.GH_TOKEN }}
         run: |
