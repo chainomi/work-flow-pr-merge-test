@@ -23,7 +23,7 @@ jobs:
         run: git checkout -b post-${{ steps.suffix.outputs.value }}
 
       - name: Run command - echo to file
-        run: echo "testing" >> index.html
+        run: echo "testing - date - $(date +'%Y%m%d%H%M%S')" >> index.html
 
       - name: Commit and push new file
         run: |
