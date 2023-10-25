@@ -57,7 +57,7 @@ jobs:
         run: |
               set -xe
               echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
-              gh pr create --title "New post" --body "This is a PR to add changes to index.html"
+              gh pr create --title "New auto pull request for - branch post-${{ steps.suffix.outputs.value }}" --body "This is a PR to add changes to index.html"
 
       - name: merge pull request
         run: |
