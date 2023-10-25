@@ -1,0 +1,55 @@
+name: Create Branch and Pull Request
+
+on:
+  # Trigger the workflow on push or manually, adjust as necessary
+  push:
+    branches:
+      - main
+
+jobs:
+  create_branch_and_pr:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Check out the repository
+    - name: Check out code
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    # Step 2: Set up the GitHub CLI
+    - name: Set up GitHub CLI
+      uses: cli/cli@v1
+
+    # Step 3: Configure user information
+    - name: Configure user info
+      run: |
+        gh auth login --with-token ${{ secrets.GITHUB_TOKEN }}
+        git config --global user.email "workflow-bot@example.com"
+        git config --global user.name "Workflow Bot"
+
+    # Step 4: Create a new branch
+    - name: Create a new branch
+      run: |
+        # Create a unique branch name based on the current time
+        branch_name="new-feature-branch-$(date +'%Y%m%d%H%M%S')"
+        
+        # Create a new branch from the current branch (main)
+        git checkout -b "$branch_name"
+        
+        #do stuff
+        echo "testing" >> index.html
+
+        #commit code
+        git add .
+        git commit -am "adding change"
+
+        # Push the new branch to the remote repository
+        git push --set-upstream origin "$branch_name"
+
+    # Step 5: Create a pull request
+    - name: Create Pull Request
+      run: |
+        # Use the GitHub CLI to create a new pull request from the new branch to the main branch
+        gh pr create --base main --head "$branch_name" --title "New feature branch PR" --body "This is an automated PR created by the Create Branch and Pull Request workflow."
+
