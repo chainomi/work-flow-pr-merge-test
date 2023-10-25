@@ -41,6 +41,7 @@ jobs:
       - name: commit and push new file
         run: |
           set -xe
+          git checkout post-${{ steps.suffix.outputs.value }}
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
           git add .
