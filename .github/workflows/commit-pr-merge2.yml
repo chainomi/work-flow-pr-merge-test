@@ -6,6 +6,8 @@ on:
     branches:
       - main
 
+permissions: write-all
+
 jobs:
   commit-changes-create-pr-and-merge-pr:
     runs-on: ubuntu-latest
@@ -37,8 +39,7 @@ jobs:
       - name: Create pull request
         run: |
               set -xe
-              gh auth login
-              # echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
+              echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
               gh pr create --title "New auto pull request for - branch post-${{ steps.suffix.outputs.value }}" --body "This is a PR to add changes to index.html"
 
       - name: Merge pull request
