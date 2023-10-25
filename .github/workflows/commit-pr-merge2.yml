@@ -32,12 +32,16 @@ jobs:
         run: echo "testing" >> index.html
 
       - name: commit and push new file
+        uses: actions/checkout@v2.3.4
+          with:
+            token: ${{ secrets.GH_TOKEN }}
         run: |
+          set -xe
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
           git add .
           git commit -m "New post"
-          git push -u origin post-${{ steps.suffix.outputs.value }}
+          git push origin post-${{ steps.suffix.outputs.value }}
 
       - name: create pull request towards the main branch
         uses: peter-evans/create-pull-request@v3.10.1
