@@ -25,8 +25,15 @@ jobs:
       - name: Example how to use the output
         run: echo "${{ steps.suffix.outputs.value }}"
 
+      # - name: create branch
+      #   run: git checkout -b post-${{ steps.suffix.outputs.value }}
+
       - name: create branch
-        run: git checkout -b post-${{ steps.suffix.outputs.value }}
+        uses: peterjgrainger/action-create-branch@v2.2.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          branch: post-${{ steps.suffix.outputs.value }}
 
       - name: run command - echo to file
         run: echo "testing" >> index.html
@@ -36,10 +43,9 @@ jobs:
           set -xe
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
-          git remote set-url origin https://chainomi:${{ secrets.GH_TOKEN }}@github.com/$GITHUB_REPOSITORY
           git add .
           git commit -m "New post"
-          git push origin post-${{ steps.suffix.outputs.value }}
+          push -u origin post-${{ steps.suffix.outputs.value }}
 
       - name: create pull request towards the main branch
         uses: peter-evans/create-pull-request@v3.10.1
