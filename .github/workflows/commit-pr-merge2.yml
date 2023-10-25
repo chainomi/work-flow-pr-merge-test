@@ -32,12 +32,11 @@ jobs:
         run: echo "testing" >> index.html
 
       - name: commit and push new file
-        with:
-          token: ${{ secrets.GH_TOKEN }}
         run: |
           set -xe
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
+          git remote set-url origin https://chainomi:${{ secrets.GH_TOKEN }}@github.com/$GITHUB_REPOSITORY
           git add .
           git commit -m "New post"
           git push origin post-${{ steps.suffix.outputs.value }}
