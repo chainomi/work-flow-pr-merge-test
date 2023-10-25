@@ -41,8 +41,8 @@ jobs:
       - name: commit and push new file
         run: |
           set -xe
-          git config user.name "GitHub Actions Bot"
-          git config user.email "<>"
+          git config user.name "chainomi"
+          git config user.email "chainomi@gmail.com"
           git add .
           git commit -m "New post"
           #git push origin post-${{ steps.suffix.outputs.value }}
