@@ -45,7 +45,13 @@ jobs:
           git config user.email "<>"
           git add .
           git commit -m "New post"
-          git push origin post-${{ steps.suffix.outputs.value }}
+          #git push origin post-${{ steps.suffix.outputs.value }}
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
+          branch: post-${{ steps.suffix.outputs.value }}
 
       - name: create pull request towards the main branch
         uses: peter-evans/create-pull-request@v3.10.1
