@@ -42,11 +42,12 @@ jobs:
       - name: Commit and push new file
         run: |
               set -xe
+              export BRANCH=$(git rev-parse --abbrev-ref HEAD) #getting current branch
               git config user.name "chainomi"
               git config user.email "chainomi@gmail.com"
               git add .
               git commit -m "New post"
-              git push origin post-${{ steps.suffix.outputs.value }}
+              git push origin $BRANCH
 
       - name: Create pull request
         run: |
