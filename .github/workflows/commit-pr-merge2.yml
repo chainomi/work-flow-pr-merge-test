@@ -11,18 +11,30 @@ permissions: write-all
 jobs:
   commit-changes-create-pr-and-merge-pr:
     runs-on: ubuntu-latest
+
+    outputs:
+      branch-name: $ {{ steps.branch.outputs.name }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2.3.4
 
-      - name: Generate pull request branch suffix
-        id: suffix
-        run: |
-              suffix=$(date +'%Y%m%d%H%M%S')
-              echo "::set-output name=value::$(echo $suffix)"
+      # - name: Generate pull request branch suffix
+      #   id: suffix
+      #   run: |
+      #         suffix=$(date +'%Y%m%d%H%M%S')
+      #         echo "::set-output name=value::$(echo $suffix)"
 
       - name: Create branch
-        run: git checkout -b post-${{ steps.suffix.outputs.value }}
+          id: branch
+        run: |
+              set -xe
+              echo "name=$(echo ${{ github.run_id }}-${{ github.run_attempt }})" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout branch
+        run: |
+              set -xe
+              git checkout -b post-${{ steps.branch.outputs.name }}
 
       - name: Run command - echo to file
         run: echo "testing - date - '$(date +'%Y%m%d%H%M%S')'" >> index.html
@@ -40,9 +52,9 @@ jobs:
         run: |
               set -xe
               echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
-              gh pr create --title "New auto pull request for - branch post-${{ steps.suffix.outputs.value }}" --body "This is a PR to add changes to index.html"
+              gh pr create --title "New auto pull request for - branch post-${{ steps.branch.outputs.name }}" --body "This is a PR to add changes to index.html"
 
       - name: Merge pull request
         run: |
               set -xe
-              gh pr merge --auto --delete-branch --squash "post-${{ steps.suffix.outputs.value }}"         
+              gh pr merge --auto --delete-branch --squash "post-${{ steps.branch.outputs.name }}"         
